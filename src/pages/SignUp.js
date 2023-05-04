@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -33,23 +35,27 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const auth = getAuth();
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
-    updateProfile(auth.currentUser, {
-      displayName: name,
-    });
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
 
-    const formDataCopy = { ...formData };
-    delete formDataCopy.password;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
 
-    formDataCopy.timestamp = serverTimestamp();
-    await setDoc(doc(db, "users", user.uid), formDataCopy);
-    navigate("/");
+      formDataCopy.timestamp = serverTimestamp();
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong with registration");
+    }
   };
 
   return (
