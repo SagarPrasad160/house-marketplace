@@ -4,7 +4,11 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { useNavigate } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 import Spinner from "../components/Spinner";
+
+const APIKEY = "b1da1bd61b92a7081c3fd7ddf7a0eb1b";
 
 function CreateListing() {
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
@@ -61,9 +65,40 @@ function CreateListing() {
     };
   }, [isMounted]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    setLoading(true);
+
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("Discounted price cannot be higher than regular price");
+    }
+
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("Image files cannot be greater than 6");
+    }
+
+    let geolocation = {};
+    let location;
+    if (geolocationEnabled) {
+      const response = await fetch(
+        `https://api.geoapify.com/v1/geocode/search?text=${address}&apiKey=2129b5a8f07e4820a700208214a400c9`
+      );
+      const data = await response.json();
+      geolocation.lat = data.features[0].geometry.coordinates[0];
+      geolocation.lng = data.features[0].geometry.coordinates[1];
+      location =
+        data.features[0].properties.address_line1 +
+        data.features[0].properties.address_line2;
+      console.log(location);
+    } else {
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
+      location = address;
+    }
+    setLoading(false);
   };
 
   const onMutate = (e) => {
