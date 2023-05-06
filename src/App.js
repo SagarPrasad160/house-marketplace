@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Offer from "./pages/Offer";
+import Offer from "./pages/Offers";
 import Profile from "./pages/Profile";
 import Category from "./pages/Category";
 import PrivateRoute from "./components/PrivateRoute";
