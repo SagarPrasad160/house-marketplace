@@ -10,6 +10,8 @@ import SignUp from "./pages/SignUp";
 import Explore from "./pages/Explore";
 import ForgotPassword from "./pages/ForgotPassword";
 
+import CreateListing from "./pages/CreateListing";
+
 import NavBar from "./components/NavBar";
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/create-listing" element={<CreateListing />} />
         </Routes>
         <NavBar />
       </Router>
